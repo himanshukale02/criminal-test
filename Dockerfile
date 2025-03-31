@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     libsqlite3-dev \
     libboost-all-dev \
     libopencv-dev \
+    libgl1-mesa-glx \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the requirements file to the working directory
