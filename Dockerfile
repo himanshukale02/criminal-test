@@ -1,7 +1,7 @@
-# Use Python 3.11 (or any version >=3.10)
+# Use the official Python image as the base image
 FROM python:3.11
 
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /app
 
 # Install system dependencies
@@ -14,15 +14,18 @@ RUN apt-get update && apt-get install -y \
     libopencv-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements file
+# Copy the requirements file to the working directory
 COPY requirements.txt .
 
-# Upgrade pip and install dependencies
+# Upgrade pip and install Python dependencies
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application files
+# Copy the entire application code to the container
 COPY . .
 
-# Set the default command to run the app
-CMD ["python", "app.py"]  # Change this based on your application
+# Expose port 8080 for external access
+EXPOSE 8080
+
+# Run the application using Gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app:app"]
